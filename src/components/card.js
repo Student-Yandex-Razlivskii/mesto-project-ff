@@ -22,7 +22,7 @@ export function createCard(cardData, onDeleteCallBack, imageHandler, likeHandler
   return cardElement;
 }
 
-export const cardRemove = (cardElement) => {
+export const removeCard = (cardElement) => {
   cardElement.remove();
 }
 

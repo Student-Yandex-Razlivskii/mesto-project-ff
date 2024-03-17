@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import { createCard, cardRemove } from './card.js';
+import { createCard, removeCard } from './card.js';
 import { openPopup, closePopup } from './modal.js';
 import { initialCards } from './cards.js';
 
@@ -36,15 +36,16 @@ const addCardToBeginning = (cardElement) => {
   cardsContainer.insertBefore(cardElement, firstChild);
 }
 
-const cardImageListener = (e) => {
+const listenerCardImage = (e) => {
   const image = e.target;
   cardOverviewImage.src = image.src;
+  cardOverviewImage.alt = image.alt;
   cardOverviewDesc.textContent = image.alt;
   openPopup(cardOverview);
 }
 
 initialCards.forEach((cardData) => {
-  const card = createCard(cardData, cardRemove, cardImageListener);
+  const card = createCard(cardData, removeCard, listenerCardImage);
   addCard(card);
 });
 
@@ -93,7 +94,7 @@ const addNewCard = (e) => {
     name: inputNameNewCard.value,
     link: inputUrlNewCard.value
   }
-  const newCard = createCard(cardInfo, cardRemove, cardImageListener); 
+  const newCard = createCard(cardInfo, removeCard, listenerCardImage); 
   addCardToBeginning(newCard);
   newCardForm.reset();
   closePopup(newCardPopup);
