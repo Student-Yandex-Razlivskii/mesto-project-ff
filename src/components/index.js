@@ -36,7 +36,7 @@ const addCardToBeginning = (cardElement) => {
   cardsContainer.insertBefore(cardElement, firstChild);
 }
 
-const listenerCardImage = (e) => {
+const listeningCardImage = (e) => {
   const image = e.target;
   cardOverviewImage.src = image.src;
   cardOverviewImage.alt = image.alt;
@@ -45,7 +45,7 @@ const listenerCardImage = (e) => {
 }
 
 initialCards.forEach((cardData) => {
-  const card = createCard(cardData, removeCard, listenerCardImage);
+  const card = createCard(cardData, removeCard, listeningCardImage);
   addCard(card);
 });
 
@@ -94,7 +94,7 @@ const addNewCard = (e) => {
     name: inputNameNewCard.value,
     link: inputUrlNewCard.value
   }
-  const newCard = createCard(cardInfo, removeCard, listenerCardImage); 
+  const newCard = createCard(cardInfo, removeCard, listeningCardImage); 
   addCardToBeginning(newCard);
   newCardForm.reset();
   closePopup(newCardPopup);
