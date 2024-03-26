@@ -2,12 +2,13 @@ import '../pages/index.css';
 import { createCard, removeCard } from './card.js';
 import { openPopup, closePopup } from './modal.js';
 import { initialCards } from './cards.js';
-
+// import { enableValidation} from './validation.js';
 
 const cardsContainer = document.querySelector('.places__list');
 
 const closeButtons = document.querySelectorAll('.popup__close');
-const popups = document.querySelectorAll('.popup')
+const popups = document.querySelectorAll('.popup');
+const nameInput = document.querySelector("[name= name]");
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const editPopup = document.querySelector('.popup_type_edit');
@@ -16,6 +17,7 @@ const profileDesc = document.querySelector('.profile__description');
 const editForm = editPopup.querySelector('.popup__form');
 const inputNameFormProfile = editForm.querySelector('.popup__input_type_name');
 const inputDescFormProfile = editForm.querySelector('.popup__input_type_description');
+const inputElement = document.querySelectorAll('.popup__input');
 
 const newCardButton = document.querySelector('.profile__add-button');
 const newCardPopup = document.querySelector('.popup_type_new-card');
@@ -23,9 +25,19 @@ const newCardForm = newCardPopup.querySelector('.popup__form');
 const inputNameNewCard = newCardForm.querySelector('.popup__input_type_card-name');
 const inputUrlNewCard = newCardForm.querySelector('.popup__input_type_url');
 
+
 const cardOverview = document.querySelector('.popup_type_image');
 const cardOverviewImage = cardOverview.querySelector('.popup__image');
 const cardOverviewDesc = cardOverview.querySelector('.popup__caption');
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".button",
+  inactiveButtonClass: "form__submit_inactive",
+  inputErrorClass: "form__input_type_error",
+  errorClass: "form_input-error_active",
+};
 
 const addCard = (cardElement) => {
   cardsContainer.appendChild(cardElement);
@@ -101,3 +113,93 @@ const addNewCard = (e) => {
 }
 
 newCardForm.addEventListener('submit', addNewCard);
+
+const profileInputError = (formElement, nameInput,validationConfig ,errorMessage) => {
+  const profileError = formElement.querySelector(
+    `.${nameInput.id}-error`
+  );
+  console.log(profileError)
+  inputElement.classList.add(validationConfig.inputErrorClass);
+  profileError.textContent = errorMessage;
+  profileError.classList.add(validationConfig.errorClass);
+};
+
+const profileHideInputError = (formElement, inputElement,validationConfig) => {
+  const profileError = formElement.querySelector(
+    `.${inputElement.id}-error`
+  );
+  inputElement.classList.remove(validationConfig.inputErrorClass);
+  profileError.classList.remove(validationConfig.errorClass);
+  profileError.textContent = "";
+}
+
+const isValidProfile = (formElement, inputElement,validationConfig) => {
+  if (inputElement.validity.patternMismatch) {
+    // встроенный метод setCustomValidity принимает на вход строку
+    // и заменяет ею стандартное сообщение об ошибке
+    inputElement.setCustomValidity(inputElement.dataset.errorProfile);
+  } else {
+    // если передать пустую строку, то будут доступны
+    // стандартные браузерные сообщения
+    inputElement.setCustomValidity("");
+  }
+  //Браузерные сообщения об ошибке
+  if (!inputElement.validity.valid) {
+    profileInputError(
+      formElement,
+      inputElement,
+      validationConfig,
+      inputElement.validationMessage
+    );
+  } else {
+    profileHideInputError(formElement, inputElement,validationConfig);
+  }
+};
+
+const setEventListeners = (formElementProfile) => {
+  const inputList = Array.from(
+    formElementProfile.querySelectorAll(".popup__input")
+  );
+  inputList.forEach((popupInput) => {
+    popupInput.addEventListener("input", () => {
+      isValidProfile(formElementProfile, popupInput);
+      toggleButtonState(inputList, buttonElement);
+    });
+  });
+};
+
+const hasInvalidInput = (inputList) => {
+  // проходим по этому массиву методом some
+  return inputList.some((inputElement) => {
+        // Если поле не валидно, колбэк вернёт true
+    // Обход массива прекратится и вся функция
+    // hasInvalidInput вернёт true
+    return !inputElement.validity.valid;
+  })
+}; 
+
+const toggleButtonState = (inputList, buttonElement,validationConfig) => {
+  // Если есть хотя бы один невалидный инпут
+  if (hasInvalidInput(inputList)) {
+    // сделай кнопку неактивной
+        buttonElement.disabled = true;
+    buttonElement.classList.add(validationConfig.inactiveButtonClass);
+  } else {
+        // иначе сделай кнопку активной
+        buttonElement.disabled = false;
+    buttonElement.classList.remove(validationConfig.inactiveButtonClass);
+  }
+}; 
+
+export const enableValidation = (validationConfig) => {
+  const formElementList = Array.from(
+    document.querySelectorAll(validationConfig.formSelector)
+  );
+
+  formElementList.forEach((formElement) => {
+    setEventListeners(formElement, validationConfig);
+  });
+  
+};
+
+enableValidation(validationConfig);
