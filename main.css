@@ -863,6 +863,23 @@ template {
   margin-bottom: 10px;
 }
 
+/*Класс для ошибки валидации формы */
+.form__input_type_error {
+  border-bottom: 1px solid red;
+}
+
+/*сообщение об ошибки*/
+.form_input-error {
+  font-size: 12px;
+  color: red;
+  opacity: 0;
+}
+
+.form_input-error_active{
+  opacity: 1;
+
+}
+
 .popup__input:last-of-type {
   margin-bottom: 0;
 }
@@ -901,6 +918,13 @@ template {
     line-height: 17px;
   }
 }
+
+.form__submit_inactive{
+  border:1px solid #000;
+ color:#000 ;
+   opacity: 20%;
+   background-color: white;
+ }
 
 .popup__caption {
   font-size: 12px;
