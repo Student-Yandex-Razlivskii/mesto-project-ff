@@ -10,7 +10,6 @@
   margin-bottom: 10px;
 }
 
-/*Класс для ошибки валидации формы */
 .popup__input_type_error {
   border-bottom-color: #f00;
 }
