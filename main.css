@@ -863,21 +863,8 @@ template {
   margin-bottom: 10px;
 }
 
-/*Класс для ошибки валидации формы */
-.form__input_type_error {
-  border-bottom: 1px solid red;
-}
-
-/*сообщение об ошибки*/
-.form_input-error {
-  font-size: 12px;
-  color: red;
-  opacity: 0;
-}
-
-.form_input-error_active{
-  opacity: 1;
-
+.popup__input_type_error {
+  border-bottom-color: #f00;
 }
 
 .popup__input:last-of-type {
@@ -890,7 +877,6 @@ template {
     line-height: 15px;
   }
 }
-
 .popup__button {
   width: 100%;
   height: 50px;
@@ -912,20 +898,25 @@ template {
   cursor: pointer;
 }
 
+.popup__button_disabled {
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background: transparent;
+  opacity: 0.2;
+}
+
+.popup__button_disabled:hover {
+  background: transparent;
+  cursor: default;
+}
+
 @media screen and (max-width: 568px) {
   .popup__button {
     font-size: 14px;
     line-height: 17px;
   }
 }
-
-.form__submit_inactive{
-  border:1px solid #000;
- color:#000 ;
-   opacity: 20%;
-   background-color: white;
- }
-
 .popup__caption {
   font-size: 12px;
   line-height: 15px;
@@ -943,6 +934,28 @@ template {
   display: block;
 }
 
+.popup__error_visible {
+  color: #f00;
+  font-size: 12px;
+}
+.popup_type_avatar .popup__content {
+  min-height: 181px;
+}
+
+.popup_type_avatar .popup__button {
+  margin-top: 38px;
+}
+
+.popup_type_avatar .popup__content {
+  padding: 34px 36px 36px;
+}
+.popup_type_confirm .popup__content {
+  min-height: 184px;
+}
+
+.popup_type_confirm .popup__button {
+  margin-top: 33px;
+}
 .popup {
   font-family: 'Inter', Arial, sans-serif;
   display: none;
@@ -956,7 +969,6 @@ template {
   right: 0;
   z-index: 10;
 }
-
 .popup_is-animated {
     display: flex;
     visibility: hidden;
