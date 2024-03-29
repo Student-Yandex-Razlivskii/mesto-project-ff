@@ -1,31 +1,104 @@
-const cardTemplate = document.getElementById('card-template');
+import { cardTemplate } from './index.js';
+import {
+  config,
+  putLikeCard,
+  deleteLikeCard,
+} from './api.js';
 
-export function createCard(cardData, onDeleteCallBack, imageHandler, likeHandler) {
-  const cardElement = cardTemplate.content.querySelector('.places__item').cloneNode(true);
+export const cardDeleteConfig = { };
+
+// Функция создания карточки
+const createCard = (
+  cardObject,
+  likeCard,
+  setImageToPopup,
+  openPopupImage,
+  currentUserId,
+  openPopupConfirmDeleteCard
+) => {
+  const cardElement = cardTemplate.cloneNode(true);
+  const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
-  const cardPic = cardElement.querySelector('.card__image');
-  const deleteButton = cardElement.querySelector('.card__delete-button');
-  const likeButton = cardElement.querySelector('.card__like-button');
+  const cardDelButton = cardElement.querySelector('.card__delete-button');
+  const cardButtonLike = cardElement.querySelector('.card__like-button');
+  const cardLikesCounter = cardElement.querySelector('.card__like-counter');
 
-  cardTitle.textContent = cardData.name;
+  const cardId = cardObject._id;
+  const ownerId = cardObject.owner._id;
+  let likesArray = cardObject.likes;
+  cardImage.src = cardObject.link;
+  cardTitle.textContent = cardObject.name;
+  cardImage.alt = cardObject.name;
+  cardLikesCounter.textContent = likesArray.length;
 
-  cardPic.src = cardData.link;
-  cardPic.alt = cardData.name;
-  cardPic.addEventListener('click', imageHandler);
+  if (!isOwnerCard(ownerId, currentUserId)) {
+    cardDelButton.remove(); // Удаление кнопки удаления карточки из DOM
+  }
 
-  deleteButton.addEventListener('click', () => {
-  onDeleteCallBack(cardElement);
+  if (isLikedByCurrentUser(likesArray, currentUserId)) {
+    cardButtonLike.classList.add('card__like-button_is-active');
+  }
+
+  // Обаботчик открытия поп-апа подтверждения удаления карточки
+  cardDelButton.addEventListener('click', (evt) => {
+    cardDeleteConfig.cardIdToDelete = cardId;
+    cardDeleteConfig.cardElementToDelete = evt.target.closest('.card');
+    openPopupConfirmDeleteCard();
   });
 
-  likeButton.addEventListener('click', handleLike);
+  // Обработчик лайка карточки
+  cardButtonLike.addEventListener('click', (evt) => {
+    if (!isLikedByCurrentUser(likesArray, currentUserId)) {
+      putLikeCard(config, cardId)
+        .then((cardObject) => {
+          likesArray = cardObject.likes;
+          updateCountLikes(cardLikesCounter, cardObject);
+        })
+        .then(() => likeCard(evt))
+        .catch((err) => console.log(err));
+    } else {
+      deleteLikeCard(config, cardId)
+        .then((cardObject) => {
+          likesArray = cardObject.likes;
+          updateCountLikes(cardLikesCounter, cardObject);
+        })
+        .then(() => likeCard(evt))
+        .catch((err) => console.log(err));
+    }
+  });
+
+  cardImage.addEventListener('click', setImageToPopup); // Обработчик добавления картинки в поп-ап картинки
+  cardImage.addEventListener('click', openPopupImage); // обработчик открытия поп-апа картинки
 
   return cardElement;
 }
 
-export const removeCard = (cardElement) => {
-  cardElement.remove();
+// Функция проверки владельца карточки
+const isOwnerCard = (ownerId, currentId) => {
+  if (ownerId === currentId) {
+    // Проверка соотвествия id владельца карточки с id текущего пользователя
+    return true;
+  }
 }
 
-const handleLike = (e) => {
-  e.target.classList.toggle('card__like-button_is-active')
+// Функция проверки лайкнутости
+const isLikedByCurrentUser = (likesArray, currentUserId) => {
+  return likesArray.some((userObject) => userObject._id === currentUserId);
 }
+
+// Функция обновления счетчика лайков
+const updateCountLikes = (cardLikesCounter, cardObject) => {
+  cardLikesCounter.textContent = cardObject.likes.length;
+}
+
+// Функция удаления карточки из DOM
+const deleteCard = (card) => {
+  card.remove();
+}
+
+// Функция переключения класса лайка карточки
+const likeCard = (evt) => {
+  evt.target.classList.toggle('card__like-button_is-active');
+}
+
+export { createCard, deleteCard, likeCard };
