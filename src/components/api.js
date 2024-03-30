@@ -6,22 +6,27 @@ const config = {
   }
 }
 
+function checkResponse(res) {
+  if (res.ok) {
+      return res.json();
+  } else {
+      return Promise.reject(`Ошибка: ${res.status}`);
+  }
+}
+
 // Функция получения данных пользователя с сервера
 const getUserProfile = (config) => {
   return fetch(`${config.baseUrl + '/users/me'}`, {
     headers: config.headers,
-  }).then((userData) =>
-    userData.ok ? userData.json() : Promise.reject(`Ошибка: ${userData.status}`)
-  );
+  }).then(checkResponse)
+  
 };
 
 // Функция получения карточек с сервера
 const getCards = (config) => {
   return fetch(`${config.baseUrl + '/cards'}`, {
     headers: config.headers,
-  }).then((cards) =>
-    cards.ok ? cards.json() : Promise.reject(`Ошибка: ${cards.status}`)
-  );
+  }).then(checkResponse)
 };
 
 // Функция отправки измененных данных профиля пользователя на сервер
@@ -50,9 +55,7 @@ const postCard = (config, cardObject) => {
       alt: cardObject.name,
       link: cardObject.link,
     }),
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  );
+  }).then(checkResponse)
 };
 
 // Функция удаления карточки с сервера
@@ -73,9 +76,7 @@ const putLikeCard = (config, cardId) => {
   return fetch(`${config.baseUrl + '/cards/likes/' + cardId}`, {
     method: 'PUT',
     headers: config.headers,
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  );
+  }).then(checkResponse)
 };
 
 // Функция снятия лайка на сервере
@@ -83,9 +84,7 @@ const deleteLikeCard = (config, cardId) => {
   return fetch(`${config.baseUrl + '/cards/likes/' + cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  );
+  }).then(checkResponse)
 };
 
 // Функция смены аватара на сервере
@@ -96,9 +95,7 @@ const patchAvatar = (config, avatarLink) => {
     body: JSON.stringify({
       avatar: avatarLink,
     }),
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  );
+  }).then(checkResponse)
 };
 
 export {

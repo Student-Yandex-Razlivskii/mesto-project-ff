@@ -1,4 +1,3 @@
-import { cardTemplate } from './index.js';
 import {
   config,
   putLikeCard,
@@ -6,6 +5,7 @@ import {
 } from './api.js';
 
 export const cardDeleteConfig = { };
+const cardTemplate = document.querySelector('#card-template').content;
 
 // Функция создания карточки
 const createCard = (

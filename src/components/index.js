@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import { createCard, deleteCard, likeCard, cardDeleteConfig} from './card.js';
-import { openPopup, closePopup, closePopUpByOverlay } from './modal.js';
-import { validationSettings, enableValidation, clearValidation } from './validation.js';
+import { openPopup, closePopup, closePopUpByOverlay, closePopupByButton } from './modal.js';
+import { validationSettings, enableValidation, clearValidation} from './validation.js';
 import {
   config,
   getUserProfile,
@@ -104,12 +104,13 @@ const  handleFormAvatarSubmit = (evt) => {
   patchAvatar(config, newAvatarLink)
     .then((userDataEdited) => {
       avatarProfile.style.backgroundImage = `url(${userDataEdited.avatar})`;
+      closePopup(popupAvatar);
     })
     .catch((err) => console.log(err))
     .finally(() => {
       renderLoading(false, popupAvatar);
     });
-  closePopup(popupAvatar);
+  
 }
 
 // Функция открытия поп-апа редактирования профиля
@@ -130,12 +131,13 @@ const handleFormEditProfileSubmit = (evt) => {
     .then((userDataEdited) => {
       profileName.textContent = userDataEdited.name;
       profileDesc.textContent = userDataEdited.about;
+      closePopup(editPopup);
     })
     .catch((err) => console.log(err))
     .finally(() => {
       renderLoading(false, editPopup);
     });
-  closePopup(editPopup);
+  
 }
 
 // Функция открытия поп-апа добавления карточки
@@ -165,13 +167,14 @@ const handleFormAddCardSubmit = (evt) => {
         openPopupConfirmDeleteCard
       );
       cardsContainer.prepend(newCard);
+      closePopup(popupAddCard);
     })
     .catch((err) => console.log(err))
     .finally(() => {
       renderLoading(false, popupAddCard);
     });
-  closePopup(popupAddCard);
-  formAddCard.reset();
+  
+  
   clearValidation(formAddCard, validationSettings);
 }
 
@@ -200,9 +203,7 @@ const renderLoading = (isLoading, popupElement) => {
 };
 
 // Фукнция закрытия поп-апа кликом на крестик
-const closePopupByButton = (evt) => {
-  closePopup(evt.target.closest('.popup'));
-}
+
 
 // Обработчики закрытия поп-апов кликом по кнопке крестик
 popupCloseButtons.forEach(function (closeButton) {
@@ -235,4 +236,3 @@ formAddCard.addEventListener('submit', handleFormAddCardSubmit);
 
 enableValidation(validationSettings);
 
-export { cardTemplate };

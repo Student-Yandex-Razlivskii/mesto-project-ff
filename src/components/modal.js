@@ -24,5 +24,9 @@ const openPopup = (popup) => {
       closePopup(popupOpened);
     }
   }
+
+  const closePopupByButton = (evt) => {
+    closePopup(evt.target.closest('.popup'));
+  }
   
-  export { openPopup, closePopup, closePopUpByOverlay };
+  export { openPopup, closePopup, closePopUpByOverlay, closePopupByButton };
