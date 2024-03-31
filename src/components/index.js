@@ -160,7 +160,6 @@ const handleFormAddCardSubmit = (evt) => {
       const newCard = createCard(
         card,
         likeCard,
-        setImageToPopup,
         openPopupImage,
         currentUserId,
         openPopupConfirmDeleteCard
@@ -174,7 +173,7 @@ const handleFormAddCardSubmit = (evt) => {
     });
   
   
-  clearValidation(formAddCard, validationSettings);
+  
 }
 
 // Функция открытия поп-апа картинки
