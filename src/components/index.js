@@ -63,7 +63,6 @@ Promise.all([getCards(config), getUserProfile(config)])
         createCard(
           card,
           likeCard,
-          setImageToPopup,
           openPopupImage,
           currentUserId,
           openPopupConfirmDeleteCard
@@ -179,12 +178,8 @@ const handleFormAddCardSubmit = (evt) => {
 }
 
 // Функция открытия поп-апа картинки
-const openPopupImage = () => {
+const openPopupImage = (evt) => {
   openPopup(popupImage);
-}
-
-// Функция добавления картинки в поп-ап картинки
-const setImageToPopup = (evt) => {
   const card = evt.target.closest('.card');
   const cardTitle = card.querySelector('.card__title');
   if (evt.target.classList.contains('card__image')) {
@@ -193,6 +188,9 @@ const setImageToPopup = (evt) => {
     imagePopup.alt = cardTitle.textContent;
   }
 }
+
+
+
 
 // Функция показа процесса загрузки данных на кнопке
 const renderLoading = (isLoading, popupElement) => {
@@ -235,4 +233,3 @@ cardAddButton.addEventListener('click', addCard);
 formAddCard.addEventListener('submit', handleFormAddCardSubmit);
 
 enableValidation(validationSettings);
-

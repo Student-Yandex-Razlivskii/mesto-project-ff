@@ -38,11 +38,7 @@ const patchEditedUserProfile = (config, nameValue, descriptionValue) => {
       name: nameValue,
       about: descriptionValue,
     }),
-  }).then((userDataEdited) =>
-    userDataEdited.ok
-      ? userDataEdited.json()
-      : Promise.reject(`Ошибка: ${userDataEdited.status}`)
-  );
+  }).then(checkResponse) 
 };
 
 // Функция добавления карточки на сервер
@@ -64,11 +60,7 @@ const deleteCardFromServer = (config, cardId) => {
     method: 'DELETE',
     headers: config.headers,
   })
-  .then((res) => {
-    if(!res.ok) {
-      return Promise.reject(`Ошибка: ${res.status}`)
-    }
-  })
+  .then(checkResponse)
 };
 
 // Функция постановки лайка на сервере

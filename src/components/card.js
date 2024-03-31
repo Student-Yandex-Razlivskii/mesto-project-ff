@@ -11,7 +11,6 @@ const cardTemplate = document.querySelector('#card-template').content;
 const createCard = (
   cardObject,
   likeCard,
-  setImageToPopup,
   openPopupImage,
   currentUserId,
   openPopupConfirmDeleteCard
@@ -67,7 +66,6 @@ const createCard = (
     }
   });
 
-  cardImage.addEventListener('click', setImageToPopup); // Обработчик добавления картинки в поп-ап картинки
   cardImage.addEventListener('click', openPopupImage); // обработчик открытия поп-апа картинки
 
   return cardElement;
